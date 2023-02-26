@@ -33,7 +33,18 @@ func main() {
 		klog.Fatalf("Error init kubernetes crontab clientset %s\n", err.Error())
 	}
 	crontabInformerFactory := externalversions.NewSharedInformerFactory(crontabClientset, time.Second*30)
-	crontabInformer := crontabInformerFactory.Stable().V1beta1().CronTabs()
-	crontabInformer.Informer()
+
+	stopCh := make(<-chan struct{})
+
+	//实例化 CronTab控制器
+	controller := NewController(crontabInformerFactory.Stable().V1beta1().CronTabs())
+
+	// 启动informer 执行ListAndWatch操作
+	go crontabInformerFactory.Start(stopCh)
+
+	//启动控制器的控制循环
+	if err := controller.Run(stopCh); err != nil {
+		klog.Fatalf("crontab controller start fatal %s\n", err)
+	}
 
 }
