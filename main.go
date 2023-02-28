@@ -23,11 +23,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//clientset, err := kubernetes.NewForConfig(config)
-	//if err != nil {
-	//	klog.Fatalf("Error init kubernetes clientset %s\n", err.Error())
-	//}
-	//实例化一个cronTab的clientset 需要用代码生成器根据CronTab生成的client进行声明
+	//versioed是根据代码生成器生成出来的NewForConfig
 	crontabClientset, err := versioned.NewForConfig(config)
 	if err != nil {
 		klog.Fatalf("Error init kubernetes crontab clientset %s\n", err.Error())
