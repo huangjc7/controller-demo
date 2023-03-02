@@ -36,6 +36,7 @@ func main() {
 	controller := NewController(crontabInformerFactory.Stable().V1beta1().CronTabs())
 
 	// 启动informer 执行ListAndWatch操作
+	//在informer启动之前需要先注册一下informer 在启动才可以
 	go crontabInformerFactory.Start(stopCh)
 
 	//启动控制器的控制循环
